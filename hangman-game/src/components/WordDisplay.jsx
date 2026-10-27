@@ -1,25 +1,25 @@
 import { useState } from "react";
 import "../styles/WordDisplay.css"
 
-function WordDisplay(){
-    const categories = {
+function WordDisplay({onNextLevel}){
+    const categories = {                              
         Fruits : ["APPLE" , "MANGO" , "ORANGE" , "GRAPES" , "GUAVA"],
         Animals : ["TIGER" , "LION" , 'MONKEY' , 'ELEPHANT' , 'RABBIT'],
         Countries : ['INDIA' , 'JAPAN' , 'CANADA' , 'BRAZIL' , 'FRANCE'],
 
     }
-
-    const [secretWord , setSecretword] = useState(()=> {
+    const [category, setCategory] = useState("Fruits");
+    const [secretWord , setSecretWord] = useState(()=> {
         const words = categories["Fruits"];
         return words[Math.floor(Math.random() * words.length)]
     });
     const [guessedLetters , setGuessedLetters] = useState([]);
     const [wrongAttempts , setWrongAttempts] = useState(0)
-    const [category , setCategory] = useState("Fruits")
+
+    const maxAttempts =6
 
     const isWon = secretWord.split("").every((letter)=> guessedLetters.includes(letter));
-    const isLost = wrongAttempts >= 6;
-
+    const isLost = wrongAttempts >= maxAttempts;
 
 
     function restartGame(){
@@ -30,19 +30,45 @@ function WordDisplay(){
 
         }while(newWord === secretWord);
 
-        setSecretword(newWord);
+        setSecretWord(newWord);
         setGuessedLetters([]);
         setWrongAttempts(0);
     }
+
+    function handleGuess(letter){
+        if(guessedLetters.includes(letter) || isWon || isLost){
+            return;
+        }
+        setGuessedLetters([...guessedLetters, letter])
+
+        if(!secretWord.includes(letter)){
+            setWrongAttempts(wrongAttempts + 1)
+        }
+    }
+
+
+    function changeCategory(newCategory) {
+         setCategory(newCategory);
+
+        const words = categories[newCategory];
+        const newWord =
+        words[Math.floor(Math.random() * words.length)];
+
+        setSecretWord(newWord);
+        setGuessedLetters([]);
+        setWrongAttempts(0);
+  }
 
     return(
         <>
            <div className="game-container">
                 <h1>Word Hunter Game</h1>
 
+                  <h2>Level 1 — Category Challenge</h2>
+
                 <div className="category">
                     <label htmlFor="category">Choose Category : </label>
-                    <select id="category" value={category} onChange={(e)=> setCategory(e.target.value)}>
+                    <select id="category" value={category} onChange={(e)=> changeCategory(e.target.value)} disabled = {isWon || isLost}>
                         {
                             Object.keys(categories).map((item) => (
                                 <option value={item} key={item}>{item}</option>
@@ -50,6 +76,7 @@ function WordDisplay(){
                         }
                     </select>
                 </div>
+
 
                 <div className="word-display">
                    {
@@ -59,9 +86,13 @@ function WordDisplay(){
                    }
                 </div>
 
-                <p>Wrong attempts : {wrongAttempts}/6</p>
+                <p>Wrong attempts : {wrongAttempts}/{maxAttempts}</p>
+
                 {isWon && <h2>You Win ! 🎉</h2>}
-                {isLost && <h2>Game Over ! 😢</h2>}
+
+                {isLost && (
+                     <h2>Game Over ! 😢 The Word was {secretWord}</h2>
+                )}
 
                 <h2>Choose a letter</h2>
 
@@ -69,10 +100,7 @@ function WordDisplay(){
                     {"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((letter)=>(
                         <button key={letter} 
                             onClick={()=>{
-                                setGuessedLetters([...guessedLetters , letter]);
-                                if(!secretWord.includes(letter)){
-                                    setWrongAttempts(wrongAttempts + 1)
-                                }
+                                handleGuess(letter)
                             }}
                             disabled={guessedLetters.includes(letter) || isWon || isLost}
                         >
@@ -80,7 +108,15 @@ function WordDisplay(){
                     ))}
                 </div>
 
-                <button className="restart-btn" onClick={restartGame}>Restart Button</button>
+                {
+                    isWon && (
+                        <button onClick={onNextLevel}>Next Level </button>
+                )}
+                {
+                    (isWon || isLost) && (
+                        <button className="restart-btn" onClick={restartGame}>Play Again</button>
+                    )
+                }
            </div>
         </>
     )
