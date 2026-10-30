@@ -62,10 +62,10 @@ function WordDisplay({onNextLevel}){
     return(
         <>
            <div className="game-container">
-                <h1>Word Hunter Game</h1>
-
-                  <h2>Level 1 — Category Challenge</h2>
-
+                <div className="game-header">
+                    <h1>🎯 Word Hunter</h1>
+                    <h2>LEVEL 01 <span>•</span> Category Challenge</h2>
+                </div>
                 <div className="category">
                     <label htmlFor="category">Choose Category : </label>
                     <select id="category" value={category} onChange={(e)=> changeCategory(e.target.value)} disabled = {isWon || isLost}>
@@ -88,11 +88,27 @@ function WordDisplay({onNextLevel}){
 
                 <p>Wrong attempts : {wrongAttempts}/{maxAttempts}</p>
 
-                {isWon && <h2>You Win ! 🎉</h2>}
+                            
+                {isWon && (
+                    <div className="result-card win-card">
+                        <span className="result-icon">🏆</span>
+                        <div>
+                            <h2>Brilliant! You Won!</h2>
+                            <p>You guessed the word correctly!</p>
+                        </div>
+                    </div>
+                )}
 
                 {isLost && (
-                     <h2>Game Over ! 😢 The Word was {secretWord}</h2>
+                    <div className="result-card lose-card">
+                        <span className="result-icon">💔</span>
+                        <div>
+                            <h2>Game Over!</h2>
+                            <p>The correct word was <strong>{secretWord}</strong></p>
+                        </div>
+                    </div>
                 )}
+
 
                 <h2>Choose a letter</h2>
 

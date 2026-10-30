@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import "../styles/WordDisplay.css";
+import "../styles/LevelTwo.css";
 
 function LevelTwo({ onNextLevel }) {
   const words = [
@@ -69,7 +69,7 @@ function LevelTwo({ onNextLevel }) {
   }
 
   return (
-    <div className="game-container">
+    <div className="level-two">
       <h1>Word Hunter Game</h1>
 
       <h2>Level 2 — Hint Challenge 💡</h2>
@@ -90,11 +90,19 @@ function LevelTwo({ onNextLevel }) {
         Wrong attempts: {wrongAttempts}/{maxAttempts}
       </p>
 
-      {isWon && <h2>You solved the mystery! 🎉</h2>}
+     {isWon && (
+      <div className="level-two-result level-two-win">
+        <h2>You solved the mystery! 🎉</h2>
+        <p>Amazing work, word detective!</p>
+      </div>
+    )}
 
-      {isLost && (
-        <h2>Game Over! The word was {secretWord}</h2>
-      )}
+    {isLost && (
+      <div className="level-two-result level-two-loss">
+        <h2>Oops! Game Over 💗</h2>
+        <p>The secret word was <strong>{secretWord}</strong></p>
+      </div>
+    )}
 
       <h3>Choose a letter</h3>
 

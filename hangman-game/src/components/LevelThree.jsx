@@ -1,145 +1,289 @@
-
 import { useState } from "react";
+import "../styles/LevelThree.css";
 
-const mysteryRooms = [
+const puzzles = [
   {
-    word: "RAINBOW",
-    clue: "I appear in the sky after rain and have many colours.",
+    title: "Crack the Secret Code",
+    type: "number",
+    emoji: "🔐",
+    clue: "Find the three-digit code.",
+    question:
+      "The first digit is 2. The second digit is double the first digit. The third digit is the sum of the first two digits.",
+    answer: "246",
+    hint: "The digits are 2, 4, and 2 + 4.",
+    successMessage: "You cracked the secret code!",
   },
   {
-    word: "KEYBOARD",
-    clue: "I have many keys, but I cannot open a door.",
+    title: "Find the Missing Number",
+    type: "number",
+    emoji: "🧠",
+    clue: "Find the pattern to continue the sequence.",
+    question: "2, 6, 12, 20, 30, ?",
+    answer: "42",
+    hint: "The differences are +4, +6, +8, and +10. What comes next?",
+    successMessage: "Amazing! You discovered the pattern!",
+  },
+{
+  title: "The Logic Challenge",
+  type: "choice",
+  emoji: "🔎",
+  clue: "Find the box containing the treasure.",
+  question:
+    "There are three boxes: A, B, and C. The treasure is in exactly one box. Box A says, 'The treasure is in Box B.' Box B says, 'The treasure is in Box C.' Box C says, 'The treasure is not in Box C.' Exactly one statement is true. Which box contains the treasure?",
+  options: ["Box A", "Box B", "Box C"],
+  answer: "Box A",
+  hint:
+    "If the treasure is in Box A, the statements are false, false, and true. Exactly one statement is true.",
+  successMessage: "You solved the logic challenge!",
+},
+
+  {
+    title: "Unscramble the Word",
+    type: "text",
+    emoji: "🔤",
+    clue: "Put the letters in the correct order.",
+    question: "Unscramble these letters: TCA",
+    answer: "CAT",
+    hint: "It's an animal that says meow.",
+    successMessage: "Great! You solved the word puzzle!",
   },
   {
-    word: "CANDLE",
-    clue: "I give light when I burn, but I become shorter over time.",
-  },
-  {
-    word: "GIRAFFE",
-    clue: "I have a very long neck and eat leaves from tall trees.",
-  },
-  {
-    word: "COMPASS",
-    clue: "I help travellers find directions.",
+    title: "The Final Escape Code",
+    type: "number",
+    emoji: "🗝️",
+    clue: "Solve the final puzzle to escape!",
+    question:
+      "A treasure chest has a four-digit code. The first digit is 1. The second digit is 2 more than the first. The third digit is the sum of the first two digits. The fourth digit is the difference between the third and first digits.",
+    answer: "1342",
+    hint: "The first digit is 1. The second is 3. The third is 1 + 3. The fourth is 4 - 1.",
+    successMessage: "You escaped! You're a Mystery Master!",
   },
 ];
 
+const MAX_ATTEMPTS = 3;
+
 function LevelThree({ onNextLevel }) {
   const [currentRoom, setCurrentRoom] = useState(0);
-  const [guessedLetters, setGuessedLetters] = useState([]);
+  const [answer, setAnswer] = useState("");
   const [wrongAttempts, setWrongAttempts] = useState(0);
+  const [message, setMessage] = useState("");
+  const [isCorrect, setIsCorrect] = useState(false);
+  const [showHint, setShowHint] = useState(false);
+  const [completedRooms, setCompletedRooms] = useState([]);
 
-  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+  const puzzle = puzzles[currentRoom];
 
-  const { word: secretWord, clue } = mysteryRooms[currentRoom];
+  const hasLost = wrongAttempts >= MAX_ATTEMPTS && !isCorrect;
+  const allRoomsCompleted = completedRooms.length === puzzles.length;
 
-  const hasWon = secretWord
-    .split("")
-    .every((letter) => guessedLetters.includes(letter));
+  function checkAnswer(event) {
+    event.preventDefault();
 
-  const hasLost = wrongAttempts >= 4;
-
-  const gameOver = hasWon || hasLost;
-
-  const allRoomsCompleted = currentRoom === mysteryRooms.length - 1 && hasWon;
-
-  function handleGuess(letter) {
-    if (guessedLetters.includes(letter) || gameOver) {
+    if (isCorrect || hasLost || !answer.trim()) {
       return;
     }
 
-    setGuessedLetters((previous) => [...previous, letter]);
+    const normalizedAnswer = answer.trim().toUpperCase();
+    const correctAnswer = puzzle.answer.toUpperCase();
 
-    if (!secretWord.includes(letter)) {
-      setWrongAttempts((previous) => previous + 1);
+    if (normalizedAnswer === correctAnswer) {
+      setIsCorrect(true);
+      setMessage(puzzle.successMessage);
+
+      setCompletedRooms((previous) =>
+        previous.includes(currentRoom)
+          ? previous
+          : [...previous, currentRoom]
+      );
+    } else {
+      const nextWrongAttempts = wrongAttempts + 1;
+      setWrongAttempts(nextWrongAttempts);
+
+      if (nextWrongAttempts >= MAX_ATTEMPTS) {
+        setMessage(`Room locked! The answer was ${puzzle.answer}.`);
+      } else {
+        setMessage(
+          `Not quite! You have ${
+            MAX_ATTEMPTS - nextWrongAttempts
+          } attempts left.`
+        );
+      }
+    }
+
+    setAnswer("");
+  }
+
+  function handleNextRoom() {
+    if (currentRoom < puzzles.length - 1 && isCorrect) {
+      setCurrentRoom((previous) => previous + 1);
+      setAnswer("");
+      setWrongAttempts(0);
+      setMessage("");
+      setIsCorrect(false);
+      setShowHint(false);
     }
   }
 
   function handleRetry() {
-    setGuessedLetters([]);
+    setAnswer("");
     setWrongAttempts(0);
-  }
-
-  function handleNextRoom() {
-    if (currentRoom < mysteryRooms.length - 1) {
-      setCurrentRoom((previous) => previous + 1);
-      setGuessedLetters([]);
-      setWrongAttempts(0);
-    }
+    setMessage("");
+    setIsCorrect(false);
+    setShowHint(false);
   }
 
   if (allRoomsCompleted) {
     return (
       <div className="level-three">
-        <h1>🏆 Congratulations!</h1>
-        <h2>You completed all five mystery rooms!</h2>
-        <p>You are a true Word Hunter! 🎉</p>
+        <div className="escape-card final-victory">
+          <div className="puzzle-emoji">🏆</div>
+          <h1>Mystery Escape Completed!</h1>
+          <p>You solved all five puzzles and escaped!</p>
+          <p className="completion-count">
+            Rooms unlocked: {completedRooms.length}/{puzzles.length}
+          </p>
 
-        <button onClick={onNextLevel}>
-          Finish Game
-        </button>
+          <button className="escape-button" onClick={onNextLevel}>
+            Finish Game 🎉
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="level-three">
-      <h1>🔐 Word Hunter: Mystery Escape</h1>
+      <header className="escape-header">
+        <p className="escape-label">THE ULTIMATE PUZZLE ADVENTURE</p>
+        <h1>🔐 Mystery Escape</h1>
+        <p>Use your brain to unlock every room!</p>
+      </header>
 
-      <h2>
-        Level 3 — Room {currentRoom + 1} of {mysteryRooms.length}
-      </h2>
-
-      <p className="mystery-clue">
-        🔍 Mystery Clue: {clue}
-      </p>
-
-      <div className="secret-word">
-        {secretWord.split("").map((letter, index) => (
-          <span key={index} className="letter-box">
-            {guessedLetters.includes(letter) ? letter : "_"}
-          </span>
-        ))}
-      </div>
-
-      <p>⏱️ Time Left: 30 seconds</p>
-
-      <p>Wrong Attempts: {wrongAttempts}/4</p>
-
-      {hasWon && (
-        <h2>🎉 Excellent! You solved the mystery!</h2>
-      )}
-
-      {hasLost && (
-        <div>
-          <h2>😢 You lost this round!</h2>
-          <p>The correct word was: {secretWord}</p>
-        </div>
-      )}
-
-      <div className="keyboard">
-        {alphabet.map((letter) => (
-          <button
-            key={letter}
-            onClick={() => handleGuess(letter)}
-            disabled={guessedLetters.includes(letter) || gameOver}
+      <div className="room-progress">
+        {puzzles.map((room, index) => (
+          <div
+            key={room.title}
+            className={`progress-room ${
+              completedRooms.includes(index) ? "completed" : ""
+            } ${currentRoom === index ? "active" : ""}`}
           >
-            {letter}
-          </button>
+            {completedRooms.includes(index) ? "✓" : index + 1}
+          </div>
         ))}
       </div>
 
-      {hasLost && (
-        <button onClick={handleRetry}>
-          🔄 Try Again
-        </button>
-      )}
+      <main className="escape-card">
+        <div className="room-heading">
+          <span className="room-emoji">{puzzle.emoji}</span>
+          <div>
+            <p className="room-number">
+              ROOM {currentRoom + 1} OF {puzzles.length}
+            </p>
+            <h2>{puzzle.title}</h2>
+          </div>
+        </div>
 
-      {hasWon && !allRoomsCompleted && (
-        <button onClick={handleNextRoom}>
-          ➡️ Next Room
-        </button>
-      )}
+        <p className="puzzle-clue">{puzzle.clue}</p>
+
+        <div className="puzzle-question">
+          <p>{puzzle.question}</p>
+        </div>
+
+        {puzzle.type === "choice" ? (
+          <div className="answer-options">
+            {puzzle.options.map((option) => (
+              <button
+                key={option}
+                type="button"
+                onClick={() => setAnswer(option)}
+                className={`answer-option ${
+                  answer === option ? "selected" : ""
+                }`}
+                disabled={isCorrect || hasLost}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+        ) : (
+          <form onSubmit={checkAnswer} className="answer-form">
+            <label htmlFor="puzzle-answer">Your answer</label>
+            <input
+              id="puzzle-answer"
+              type="text"
+              value={answer}
+              onChange={(event) => setAnswer(event.target.value)}
+              placeholder="Enter your answer..."
+              disabled={isCorrect || hasLost}
+              autoComplete="off"
+            />
+
+            <button
+              type="submit"
+              className="escape-button"
+              disabled={isCorrect || hasLost || !answer.trim()}
+            >
+              Unlock Room 🔓
+            </button>
+          </form>
+        )}
+
+        {puzzle.type === "choice" && (
+          <button
+            type="button"
+            className="escape-button"
+            onClick={checkAnswer}
+            disabled={isCorrect || hasLost || !answer.trim()}
+          >
+            Check Answer
+          </button>
+        )}
+
+        {!isCorrect && !hasLost && (
+          <button
+            type="button"
+            className="hint-button"
+            onClick={() => setShowHint((previous) => !previous)}
+          >
+            {showHint ? "Hide Hint" : "💡 Need a Hint?"}
+          </button>
+        )}
+
+        {showHint && !isCorrect && !hasLost && (
+          <p className="puzzle-hint">{puzzle.hint}</p>
+        )}
+
+        <div
+          className={`puzzle-feedback ${
+            isCorrect ? "feedback-success" : hasLost ? "feedback-error" : ""
+          }`}
+          aria-live="polite"
+        >
+          {message}
+        </div>
+
+        <p className="attempt-counter">
+          Attempts used: {wrongAttempts}/{MAX_ATTEMPTS}
+        </p>
+
+        {hasLost && (
+          <button className="escape-button" onClick={handleRetry}>
+            🔄 Retry Room
+          </button>
+        )}
+
+        {isCorrect && currentRoom < puzzles.length - 1 && (
+          <button className="escape-button" onClick={handleNextRoom}>
+            Next Room ➜
+          </button>
+        )}
+
+        {isCorrect && currentRoom === puzzles.length - 1 && (
+          <p className="final-message">
+            🎉 Final puzzle solved! Preparing your victory screen...
+          </p>
+        )}
+      </main>
     </div>
   );
 }

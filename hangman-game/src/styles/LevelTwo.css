@@ -1,0 +1,194 @@
+.level-two {
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 85% 12%, #fff0b9 0, transparent 24%),
+    radial-gradient(circle at 10% 90%, #c9f9ec 0, transparent 25%),
+    linear-gradient(135deg, #eafff8, #eaf2ff);
+  color: #294b61;
+  font-family: 'Nunito', sans-serif;
+  text-align: center;
+}
+
+.level-two h1 {
+  margin: 0;
+  color: #168c91;
+  font-family: 'Fredoka', sans-serif;
+  font-size: clamp(2rem, 4vw, 3.1rem);
+  text-shadow: 0 4px 0 #c7f3e8;
+}
+
+.level-two h2 {
+  margin: 0;
+  color: #4486cc;
+  font-family: 'Fredoka', sans-serif;
+  font-size: clamp(1.25rem, 3vw, 1.8rem);
+}
+
+.level-two > p {
+  width: min(100%, 650px);
+  margin: 0;
+  padding: 15px 20px;
+  border: 2px solid #bceee4;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 5px 0 #c8f1e7;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.level-two .word-display {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 8px 0;
+}
+
+.level-two .word-display span {
+  width: clamp(42px, 7vw, 63px);
+  height: clamp(50px, 8vw, 70px);
+  display: grid;
+  place-items: center;
+  border: 3px solid #8ddfd0;
+  border-radius: 18px;
+  background: white;
+  color: #168c91;
+  box-shadow: 0 6px 0 #b9ece3;
+  font-family: 'Fredoka', sans-serif;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+}
+
+.level-two .keyboard {
+  width: min(100%, 600px);
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.level-two .keyboard button {
+  min-width: 0;
+  min-height: 43px;
+  border: 0;
+  border-radius: 13px;
+  background: white;
+  color: #238c9c;
+  box-shadow: 0 4px 0 #b9e4ef;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.level-two .keyboard button:hover:not(:disabled) {
+  transform: translateY(-4px) rotate(2deg);
+  background: #d9fff5;
+  box-shadow: 0 7px 0 #9cdbd3;
+}
+
+.level-two .keyboard button:disabled {
+  background: #e7eeee;
+  color: #a5b6b7;
+  box-shadow: 0 3px 0 #d4e0e0;
+  cursor: not-allowed;
+}
+
+.level-two > h3 {
+  margin: 0;
+  color: #3982b8;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.3rem;
+}
+
+.level-two-result {
+  width: min(100%, 500px);
+  padding: 15px 20px;
+  border-radius: 22px;
+  animation: levelTwoPop 0.3s ease;
+}
+
+.level-two-result h2 {
+  margin: 0 0 5px;
+}
+
+.level-two-result p {
+  margin: 0;
+  font-weight: 700;
+}
+
+.level-two-win {
+  border: 2px solid #a6e8b6;
+  background: #e5ffeb;
+  box-shadow: 0 5px 0 #c0efcb;
+}
+
+.level-two-win h2 {
+  color: #228d52;
+}
+
+.level-two-loss {
+  border: 2px solid #ffbdc5;
+  background: #fff0f2;
+  box-shadow: 0 5px 0 #ffd3d9;
+}
+
+.level-two-loss h2 {
+  color: #d94d64;
+}
+
+.level-two > button {
+  padding: 12px 24px;
+  border: 0;
+  border-radius: 15px;
+  background: #39b9aa;
+  color: white;
+  box-shadow: 0 5px 0 #218f84;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.level-two > button:hover {
+  transform: translateY(-3px);
+}
+
+@keyframes levelTwoPop {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 500px) {
+  .level-two {
+    padding: 15px 12px;
+    gap: 13px;
+  }
+
+  .level-two .keyboard {
+    gap: 7px;
+  }
+
+  .level-two .keyboard button {
+    min-height: 39px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+  }
+}

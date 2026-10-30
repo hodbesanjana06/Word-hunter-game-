@@ -1,0 +1,375 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+.completion-screen {
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 12% 18%, #ffe0ed 0, transparent 23%),
+    radial-gradient(circle at 88% 80%, #d7f8ff 0, transparent 25%),
+    linear-gradient(135deg, #fff8e8, #f1e9ff);
+  font-family: 'Nunito', sans-serif;
+  color: #49365f;
+}
+
+.completion-card {
+  width: min(100%, 650px);
+  padding: 28px;
+  position: relative;
+  z-index: 2;
+  border: 3px solid white;
+  border-radius: 32px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow:
+    0 10px 0 #dfd0ff,
+    0 20px 50px rgba(108, 75, 150, 0.14);
+  text-align: center;
+  animation: victoryAppear 0.65s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.trophy-container {
+  width: 115px;
+  height: 115px;
+  margin: 0 auto 12px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  border: 5px solid #ffe5a1;
+  border-radius: 35px;
+  background: linear-gradient(145deg, #fff5c9, #ffdfa0);
+  box-shadow: 0 7px 0 #f2ca6d;
+  transform: rotate(-4deg);
+}
+
+.trophy {
+  font-size: 4.5rem;
+  filter: drop-shadow(0 4px 2px rgba(146, 92, 23, 0.15));
+  animation: trophyBounce 1.3s ease-in-out infinite alternate;
+}
+
+.trophy-sparkle {
+  position: absolute;
+  font-size: 1.5rem;
+  animation: sparkle 1.4s ease-in-out infinite alternate;
+}
+
+.sparkle-one {
+  top: -15px;
+  right: -15px;
+}
+
+.sparkle-two {
+  bottom: -10px;
+  left: -17px;
+  animation-delay: 0.5s;
+}
+
+.completion-badge {
+  display: inline-block;
+  padding: 8px 15px;
+  border: 2px solid #f8d98c;
+  border-radius: 30px;
+  background: #fff5d7;
+  color: #a76e21;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+}
+
+.completion-card h1 {
+  margin: 12px 0 0;
+  color: #8053d8;
+  font-family: 'Fredoka', sans-serif;
+  font-size: clamp(2.8rem, 7vw, 4.4rem);
+  line-height: 1.1;
+  text-shadow: 0 5px 0 #e8dcff;
+}
+
+.completion-subtitle {
+  margin: 8px 0 20px;
+  color: #e38b65;
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  font-weight: 900;
+}
+
+.completion-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.stat-box {
+  min-width: 0;
+  padding: 14px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  border: 2px solid transparent;
+  border-radius: 20px;
+  transition: transform 0.2s ease;
+}
+
+.stat-box:hover {
+  transform: translateY(-5px) rotate(-2deg);
+}
+
+.stat-box > span {
+  font-size: 2rem;
+}
+
+.stat-box strong {
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+.stat-box small {
+  font-size: 0.73rem;
+  font-weight: 800;
+}
+
+.stat-purple {
+  border-color: #dfd0ff;
+  background: #f5efff;
+  color: #7650c5;
+}
+
+.stat-pink {
+  border-color: #ffd6e7;
+  background: #fff0f6;
+  color: #cf6396;
+}
+
+.stat-yellow {
+  border-color: #ffe3a4;
+  background: #fff8df;
+  color: #b48027;
+}
+
+.completion-message {
+  margin: 15px 0 20px;
+  color: #82728f;
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1.7;
+}
+
+.play-again-button {
+  width: min(100%, 290px);
+  min-height: 57px;
+  padding: 14px 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #9a73f0, #7953d7);
+  color: white;
+  box-shadow: 0 7px 0 #6040b6;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.play-again-button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 11px 0 #6040b6;
+}
+
+.play-again-button:active {
+  transform: translateY(3px);
+  box-shadow: 0 3px 0 #6040b6;
+}
+
+
+
+.confetti {
+  position: absolute;
+  z-index: 1;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  animation: floatAround 3s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.confetti-one {
+  top: 8%;
+  left: 8%;
+}
+
+.confetti-two {
+  top: 15%;
+  right: 9%;
+  animation-delay: 0.5s;
+}
+
+.confetti-three {
+  bottom: 10%;
+  left: 10%;
+  animation-delay: 1s;
+}
+
+.confetti-four {
+  right: 8%;
+  bottom: 12%;
+  animation-delay: 0.7s;
+}
+
+@keyframes victoryAppear {
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes trophyBounce {
+  from {
+    transform: translateY(0) rotate(-5deg);
+  }
+
+  to {
+    transform: translateY(-7px) rotate(5deg);
+  }
+}
+
+@keyframes sparkle {
+  from {
+    transform: scale(0.8) rotate(-10deg);
+  }
+
+  to {
+    transform: scale(1.2) rotate(15deg);
+  }
+}
+
+@keyframes floatAround {
+  from {
+    transform: translateY(0) rotate(-8deg);
+  }
+
+  to {
+    transform: translateY(-15px) rotate(12deg);
+  }
+}
+
+@media (max-width: 500px) {
+  .completion-screen {
+    padding: 14px;
+  }
+
+  .completion-card {
+    padding: 23px 15px;
+    border-radius: 25px;
+  }
+
+  .trophy-container {
+    width: 90px;
+    height: 90px;
+    border-radius: 27px;
+  }
+
+  .trophy {
+    font-size: 3.5rem;
+  }
+
+  .completion-stats {
+    gap: 7px;
+  }
+
+  .stat-box {
+    padding: 12px 3px;
+    border-radius: 15px;
+  }
+
+  .stat-box > span {
+    font-size: 1.6rem;
+  }
+
+  .stat-box strong {
+    font-size: 0.69rem;
+  }
+
+  .stat-box small {
+    font-size: 0.64rem;
+  }
+
+  .completion-footer {
+    font-size: 0.58rem;
+    letter-spacing: 1px;
+  }
+
+  .confetti {
+    opacity: 0.6;
+  }
+}
+
+@media (max-height: 700px) {
+  .completion-screen {
+    padding: 12px;
+  }
+
+  .completion-card {
+    padding: 16px 22px;
+  }
+
+  .trophy-container {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 8px;
+    border-radius: 22px;
+  }
+
+  .trophy {
+    font-size: 2.8rem;
+  }
+
+  .completion-card h1 {
+    font-size: 2.6rem;
+    margin-top: 7px;
+  }
+
+  .completion-subtitle {
+    margin: 5px 0 12px;
+  }
+
+  .completion-stats {
+    margin: 12px 0;
+  }
+
+  .stat-box {
+    padding: 8px 5px;
+  }
+
+  .stat-box > span {
+    font-size: 1.5rem;
+  }
+
+  .completion-message {
+    margin: 10px 0 13px;
+    line-height: 1.4;
+  }
+
+  .play-again-button {
+    min-height: 48px;
+    padding: 10px 18px;
+  }
+
+  .completion-footer {
+    margin-top: 13px;
+  }
+}
